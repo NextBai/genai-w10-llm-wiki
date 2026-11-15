@@ -1,17 +1,215 @@
-<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AI Agents 的循環與圖 — LLM Wiki 教學簡報</title><style>body{margin:0;background:#0d1420;font-family:'Noto Sans TC',sans-serif}
-.sec{min-height:92vh;margin:4vh auto;max-width:900px;padding:6vh 6vw;background:#17233a;border:1px solid #3d5473;border-radius:14px;color:#e8eef8;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-h1{font-size:2.6em;color:#7fd1ff}h2{font-size:1.8em;color:#7fd1ff;border-bottom:2px solid #3d5473;padding-bottom:.3em}
-.sub{color:#9db4d0}.role{background:#22334f;padding:.8em 1em;border-left:4px solid #7fd1ff;border-radius:6px}
-.abs{color:#c7d6ea;line-height:1.7}.src{color:#6d84a3;font-size:.85em}pre{color:#a8e6a3;line-height:1.5;overflow-x:auto}
-ul li{margin:.6em 0;line-height:1.6}nav{position:fixed;right:1em;top:1em}.dot{display:inline-block;width:10px;height:10px;margin:2px;background:#3d5473;border-radius:50%}</style></head><body>
-<nav><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></nav>
-<section class="sec" id="cover"><h1>AI Agents 的循環與圖</h1><p class="sub">從 5 篇論文看懂 Agent 的 loop 與 graph</p><p class="sub">生成式AI 第十週作業 ｜ 海大資工所 白東衢</p></section>
-<section class="sec" id="why"><h2>為什麼 Agent 是「循環」不是「一句話」</h2><ul><li>單次問答：問一次、答一次，錯了不會修</li><li>Agent：<b>思考 → 行動 → 觀察</b>不斷往復，直到完成</li><li>多個能力（檢索、工具、反思）用<b>圖</b>串接，每個方塊是一個節點</li></ul></section>
-<section class="sec" id="react"><h2>ReAct: Synergizing Reasoning and Acting in Language Models</h2><p class="role"><b>角色：</b>核心循環：思考 → 行動 → 觀察的迭代往返迴圈</p><p class="abs">While large language models (LLMs) have demonstrated impressive capabilities across tasks in language understanding and interactive decision making, their abilities for reasoning (e.g. chain-of-thought prompting) and acting (e.g. action plan generation) have primarily been studied as separate topics. In this [...]</p><p class="src">來源：https://arxiv.org/abs/2210.03629</p></section>
-<section class="sec" id="reflexion"><h2>Reflexion: Language Agents with Verbal Reinforcement Learning</h2><p class="role"><b>角色：</b>反思節點：失敗後生成文字回饋重試（內層 loop）</p><p class="abs">Large language models (LLMs) have been increasingly used to interact with external environments (e.g., games, compilers, APIs) as goal-driven agents. However, it remains challenging for these language agents to quickly and efficiently learn from trial-and-error as traditional reinforcement learning methods [...]</p><p class="src">來源：https://arxiv.org/abs/2303.11366</p></section>
-<section class="sec" id="toolformer"><h2>Toolformer: Language Models Can Teach Themselves to Use Tools</h2><p class="role"><b>角色：</b>工具行動節點：技能擴充 Agent 可做的事</p><p class="abs">Language models (LMs) exhibit remarkable abilities to solve new tasks from just a few examples or textual instructions, especially at scale. They also, paradoxically, struggle with basic functionality, such as arithmetic or factual lookup, where much simpler and smaller models excel. In this paper, we show that [...]</p><p class="src">來源：https://arxiv.org/abs/2302.04761</p></section>
-<section class="sec" id="genagents"><h2>Generative Agents: Interactive Simulacra of Human Behavior</h2><p class="role"><b>角色：</b>記憶架構：觀察沉澱 → 反思 → 循環索取出題</p><p class="abs">Believable proxies of human behavior can empower interactive applications ranging from immersive environments to rehearsal spaces for interpersonal communication to prototyping tools. In this paper, we introduce generative agents--computational software agents that simulate believable human behavior. Generative [...]</p><p class="src">來源：https://arxiv.org/abs/2304.03442</p></section>
-<section class="sec" id="crag"><h2>Corrective Retrieval Augmented Generation</h2><p class="role"><b>角色：</b>檢查門檻：檢索品質分級與重新整理（校驗節點）</p><p class="abs">Large language models (LLMs) inevitably exhibit hallucinations since the accuracy of generated texts cannot be secured solely by the parametric knowledge they encapsulate. Although retrieval-augmented generation (RAG) is a practicable complement to LLMs, it relies heavily on the relevance of retrieved documents, [...]</p><p class="src">來源：https://arxiv.org/abs/2401.15884</p></section>
-<section class="sec" id="graph"><h2>把 5 篇拼成一張圖</h2><pre>  使用者提問<br>     │<br>     ▼<br> ┌► ReAct 思考 ──► 工具行動(Toolformer) ──► 觀察<br> │      │                                      │<br> │      ▼                                      ▼<br> │   CRAG 檢查檢索品質 ◄──────────────── 記憶沉澱(Generative Agents)<br> │      │                                      │<br> │      ▼                                      ▼<br> └── 失敗：Reflexion 反思重試 ◄─────── 成功：輸出答案</pre><p class="sub">內圈＝ReAct 迴圈；外圈＝反思與記憶的長程迴圈；CRAG＝门口的品質門檻</p></section>
-<section class="sec" id="end"><h2>重點回顧</h2><ul><li>Agent 的心臟是<b>迴圈</b>（ReAct），不是更長的一次性提示</li><li><b>反思</b>讓迴圈越跑越好（Reflexion）</li><li><b>工具</b>擴大行動半徑（Toolformer）；<b>記憶</b>讓經驗可重複提取（Generative Agents）</li><li><b>檢查節點</b>把品質問題擋在生成之前（CRAG）</li></ul><p class="sub">知識庫：wiki/（本 Colab 產生）｜ 本簡報由 Colab 自動生成</p></section>
-</body></html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agents 的迴圈與圖 — 從五篇論文看 Agent 架構｜生成式AI 第十週 LLM Wiki 教學簡報</title>
+<style>
+  :root{
+    --bg:#101418; --panel:#1a2129; --ink:#e8edf2; --sub:#9fb0bf;
+    --acc:#4fc3f7; --warn:#ffb74d; --line:#2c3947;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;font-family:"標楷體","DFKai-SB","Times New Roman",serif;color:var(--ink);overflow:hidden}
+  .deck{position:relative;width:100vw;height:100vh}
+  section{position:absolute;inset:0;display:none;flex-direction:column;padding:5vh 7vw;background:var(--bg)}
+  section.active{display:flex}
+  .kicker{font-size:1.05rem;letter-spacing:.35em;color:var(--acc);margin-bottom:1.2vh}
+  h1{font-size:3.1rem;line-height:1.25;margin-bottom:2vh}
+  h2{font-size:2.2rem;margin-bottom:2.4vh;color:var(--acc)}
+  h3{font-size:1.5rem;margin-bottom:.8vh}
+  p,li{font-size:1.35rem;line-height:1.7;color:var(--ink)}
+  .sub{color:var(--sub)}
+  ul{padding-left:1.6em}
+  li{margin-bottom:.9vh}
+  .cols{display:flex;gap:3vw;flex:1;align-items:flex-start}
+  .col{flex:1}
+  .card{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--acc);border-radius:12px;padding:1.6vh 1.4vw;margin-bottom:1.4vh}
+  .card.warn{border-left-color:var(--warn)}
+  .tag{display:inline-block;font-size:1rem;padding:.15em .7em;border-radius:999px;background:#20303d;color:var(--acc);margin-right:.5em}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid var(--line);padding:.55em .8em;font-size:1.18rem;text-align:left;vertical-align:top}
+  th{background:#20303d;color:var(--acc)}
+  .flow{display:flex;align-items:center;justify-content:center;gap:.6em;margin:3vh 0;flex-wrap:wrap}
+  .node{background:var(--panel);border:2px solid var(--acc);border-radius:12px;padding:.7em 1.2em;font-size:1.45rem}
+  .arrow{color:var(--acc);font-size:1.9rem}
+  .loopback{width:100%;text-align:center;color:var(--warn);font-size:1.2rem;margin-top:.6vh}
+  .footer{position:absolute;bottom:2.5vh;left:7vw;right:7vw;display:flex;justify-content:space-between;color:var(--sub);font-size:1rem;border-top:1px solid var(--line);padding-top:1vh}
+  .pager{position:fixed;bottom:2vh;right:3vw;color:#5c6f80;font-size:.95rem;z-index:9}
+  .src{font-size:1.02rem;color:var(--sub);word-break:break-all}
+  .big{font-size:1.7rem}
+  .qa .q{color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="active">
+  <div class="kicker">生成式AI ・ 第十週作業 ・ LLM Wiki 教學簡報</div>
+  <h1>AI Agents 的迴圈與圖<br><span class="sub" style="font-size:1.9rem">從五篇論文看 Agent 的循環架構與節點分工</span></h1>
+  <p class="sub big" style="margin-top:2vh">知識庫：個人 LLM Wiki（由 Google Colab 筆記本 ingest 5 篇 arXiv 論文建立）</p>
+  <p class="sub" style="margin-top:1vh">主題：ReAct ・ Reflexion ・ Toolformer ・ Generative Agents ・ CRAG</p>
+  <div class="footer"><span>海洋大學 生成式AI：文字與圖像生成的原理與實務</span><span>以 ← → 或空白鍵翻頁</span></div>
+</section>
+
+<section>
+  <h2>為什麼談「迴圈」與「圖」？</h2>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li>單次生成＝一條直線：prompt → answer，錯了也照樣交出去。</li>
+        <li>Agent＝把生成放進<b>回饋迴圈</b>：行動後觀察結果，決定下一步。</li>
+        <li>迴圈裡每個位置（思考、工具、記憶、檢查）都可換零件——擺成節點與連線，就是 <b>graph</b>。</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="flow">
+        <div class="node">思考</div><div class="arrow">→</div>
+        <div class="node">行動</div><div class="arrow">→</div>
+        <div class="node">觀察</div>
+        <div class="loopback">↺ 觀察結果回填，再進下一輪思考</div>
+      </div>
+      <p class="sub">這是所有 Agent 框架的最小骨架；五篇論文各補一塊零件。</p>
+    </div>
+  </div>
+  <div class="footer"><span>LLM Wiki：wiki/index.md</span><span>1 / 8</span></div>
+</section>
+
+<section>
+  <h2>五篇論文在迴圈裡各補一塊零件</h2>
+  <table>
+    <tr><th>論文</th><th>在 loop / graph 中的角色</th></tr>
+    <tr><td>ReAct</td><td>核心循環：思考 → 行動 → 觀察的迭代迴圈</td></tr>
+    <tr><td>Reflexion</td><td>反思節點：失敗後生成文字回饋重試（模型內 loop）</td></tr>
+    <tr><td>Toolformer</td><td>工具行動節點：技能擴展 Agent 可做的事</td></tr>
+    <tr><td>Generative Agents</td><td>記憶架構：觀察沉澱 → 反思 → 循環索引取回</td></tr>
+    <tr><td>CRAG</td><td>檢查門檻：檢索品質分級與重新整理（校驗節點前移）</td></tr>
+  </table>
+  <p class="sub" style="margin-top:2vh">一張表看清分工：誰提供循環、誰當節點、誰把關品質。</p>
+  <div class="footer"><span>討論結論同步寫入各篇 wiki 的「loop/graph 角色」段落</span><span>2 / 8</span></div>
+</section>
+
+<section>
+  <h2>零件一：ReAct — 把「想」與「做」交錯</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3><span class="tag">循環本體</span>Thought → Action → Observation</h3>
+        <p>模型先產出思考文字，再選擇行動（例如查資料），把行動結果當觀察讀回來，進入下一輪。推理接地氣，不再憑空編造。</p>
+      </div>
+      <p class="sub">沒有 ReAct 的迴圈，後面的反思與校驗都無處可掛。</p>
+    </div>
+    <div class="col">
+      <div class="flow" style="flex-direction:column;gap:.4em">
+        <div class="node">Thought（我缺什麼資訊）</div><div class="arrow">↓</div>
+        <div class="node">Action（搜/search:…）</div><div class="arrow">↓</div>
+        <div class="node">Observation（讀回結果）</div>
+        <div class="loopback">↺ 未達目標則回 Thought</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="src">arXiv:2210.03629</span><span>3 / 8</span></div>
+</section>
+
+<section>
+  <h2>零件二、三：Reflexion 反思節點 ＋ Toolformer 工具節點</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3><span class="tag">Reflexion</span>失敗後寫「自我回饋」再重試</h3>
+        <p>迴圈跑完仍失敗時，模型用文字寫下失敗原因，存入情節記憶，下一次迭代把這段回饋當上下文——不用重訓參數，靠語言自我修正（模型內 loop）。</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3><span class="tag">Toolformer</span>行動節點的可執行清單</h3>
+        <p>模型自 supervision 學會何時插入 API 呼叫（搜尋、計算、翻譯），把「行動」從純文字升級成真能執行的工具調用——擴展 Agent 可做的事。</p>
+      </div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:1.5vh">一個讓迴圈「會改進」，一個讓行動「會伸手」。</p>
+  <div class="footer"><span class="src">arXiv:2303.11366 ・ arXiv:2302.04761</span><span>4 / 8</span></div>
+</section>
+
+<section>
+  <h2>零件四、五：Generative Agents 記憶 ＋ CRAG 校驗</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3><span class="tag">Generative Agents</span>觀察沉澱 → 反思 → 索引取回</h3>
+        <p>把每日觀察寫進記憶流，定期把零散觀察合成高階反思，再依相關性取回——迴圈有了跨時間的狀態，行為才连貫可信。</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card warn">
+        <h3><span class="tag" style="color:var(--warn)">CRAG</span>檢查節點前移：先驗收再進迴圈</h3>
+        <p>對檢索文件做品質分級（正確／含糊／錯誤），含糊或錯誤即觸發重新檢索與整理——髒資料不進後續節點，把校驗從末端移到入口。</p>
+      </div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:1.5vh">記憶讓迴圈「記得住」，校驗讓迴圈「吃得乾淨」。</p>
+  <div class="footer"><span class="src">arXiv:2304.03442 ・ arXiv:2401.15884</span><span>5 / 8</span></div>
+</section>
+
+<section class="qa">
+  <h2>質疑反問：拼成完整 graph 之後呢？</h2>
+  <ul>
+    <li class="q">Q1 五個零件全開，迴圈會不會永遠不結束？</li>
+    <li>迭代上限、成本與收斂條件要誰來定？反思與重試各設幾次？</li>
+    <li class="q">Q2 CRAG 的分級器自己錯了怎麼辦？</li>
+    <li>把關者也是模型——校驗節點的置信度如何校準，誰校驗校驗者？</li>
+    <li class="q">Q3 Reflexion 的文字回饋會不會固化成偏見？</li>
+    <li>錯誤的自我解釋存入記憶後，會不會在後續任務反覆污染判斷？</li>
+    <li class="q">Q4 記憶取回的「相關性」等於「正確性」嗎？</li>
+    <li>Generative Agents 按相似度召回，過時觀察混進上下文如何偵測？</li>
+  </ul>
+  <div class="footer"><span>課堂討論用</span><span>6 / 8</span></div>
+</section>
+
+<section>
+  <h2>總結：一套骨架，五塊拼圖</h2>
+  <ul>
+    <li><b>ReAct 給骨架</b>：思考—行動—觀察的迭代循環是 Agent 的最小單元。</li>
+    <li><b>Reflexion／Toolformer 補節點</b>：一個管失敗改進，一個管行動能力。</li>
+    <li><b>Generative Agents 加狀態</b>：記憶流讓迴圈跨時間運作。</li>
+    <li><b>CRAG 設門檻</b>：入口校驗決定整個 graph 的資料品質。</li>
+    <li class="sub">設計自己的 Agent 系統時，先畫迴圈、再選節點、最後決定把關位置。</li>
+  </ul>
+  <div class="footer"><span>本簡報内容由 LLM Wiki（Colab ingest）生成</span><span>7 / 8</span></div>
+</section>
+
+<section>
+  <h2>知識庫與流程紀錄</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card">
+        <h3>LLM Wiki 由來（Karpathy 式 ingest）</h3>
+        <ul>
+          <li>於 <b>Google Colab 筆記本</b>執行 ingest：抓 5 篇 arXiv 論文標題與摘要 → 寫成 <span class="tag">wiki/*.md</span> 知識檔 → 產生 <span class="tag">index.md</span> 目錄。</li>
+          <li>先討論、後生成：loop/graph 角色的討論結論寫回各篇 wiki，再據以生成本 HTML 簡報。</li>
+          <li>Validator 儲存格檢查 5/5 篇皆有標題與摘要（PASS）。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>連結</h3>
+        <p>Colab 筆記本：<a href="COLAB_URL" style="color:var(--acc)">w10_llm_wiki_ingest.ipynb</a></p>
+        <p style="margin-top:1vh">本簡報：<a href="PAGES_URL" style="color:var(--acc)">GitHub Pages</a></p>
+        <p class="sub" style="margin-top:2vh">Wiki 條目：react ・ reflexion ・ toolformer ・ genagents ・ crag（皆含來源、作者、日期、摘要）</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>生成式AI 第十週 ・ LLM Wiki 教學 HTML 簡報</span><span>8 / 8</span></div>
+</section>
+
+</div>
+<div class="pager" id="pager">1 / 9</div>
+<script>
+  const secs=[...document.querySelectorAll('section')];let i=0;
+  function show(n){i=(n+secs.length)%secs.length;secs.forEach((s,k)=>s.classList.toggle('active',k===i));document.getElementById('pager').textContent=(i+1)+' / '+secs.length;}
+  addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key))show(i+1);if(['ArrowLeft','PageUp'].includes(e.key))show(i-1);});
+  addEventListener('click',e=>{if(e.target.closest('a'))return;show(i+1);});
+</script>
+</body>
+</html>
