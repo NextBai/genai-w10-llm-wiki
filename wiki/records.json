@@ -1,0 +1,27 @@
+[
+ {
+  "name": "react",
+  "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+  "url": "https://arxiv.org/abs/2210.03629"
+ },
+ {
+  "name": "reflexion",
+  "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+  "url": "https://arxiv.org/abs/2303.11366"
+ },
+ {
+  "name": "toolformer",
+  "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+  "url": "https://arxiv.org/abs/2302.04761"
+ },
+ {
+  "name": "genagents",
+  "title": "Generative Agents: Interactive Simulacra of Human Behavior",
+  "url": "https://arxiv.org/abs/2304.03442"
+ },
+ {
+  "name": "crag",
+  "title": "Corrective Retrieval Augmented Generation",
+  "url": "https://arxiv.org/abs/2401.15884"
+ }
+]

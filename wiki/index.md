@@ -1,7 +1,7 @@
-# AI Agents LLM Wiki — 目錄
+# LLM Wiki 目錄：AI Agents 的循環與圖
 
-- [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)（wiki/react.md）
-- [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366)（wiki/reflexion.md）
-- [Toolformer: Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761)（wiki/toolformer.md）
-- [Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442)（wiki/genagents.md）
-- [Corrective Retrieval Augmented Generation](https://arxiv.org/abs/2401.15884)（wiki/crag.md）
+- [ReAct: Synergizing Reasoning and Acting in Language Models](react.md)（https://arxiv.org/abs/2210.03629）
+- [Reflexion: Language Agents with Verbal Reinforcement Learning](reflexion.md)（https://arxiv.org/abs/2303.11366）
+- [Toolformer: Language Models Can Teach Themselves to Use Tools](toolformer.md)（https://arxiv.org/abs/2302.04761）
+- [Generative Agents: Interactive Simulacra of Human Behavior](genagents.md)（https://arxiv.org/abs/2304.03442）
+- [Corrective Retrieval Augmented Generation](crag.md)（https://arxiv.org/abs/2401.15884）
