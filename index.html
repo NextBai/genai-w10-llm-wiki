@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>從 LLM Wiki 到 AI Agent：五篇論文的 Loop 與 Graph</title>
+<style>
+  :root { --ink:#1a2332; --accent:#2f6fed; --paper:#f7f9fc; --sub:#5b6b7f; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Times New Roman","標楷體",DFKai-SB,serif; background:#0d1117; }
+  .slide { width:100vw; min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:6vh 9vw; background:var(--paper); color:var(--ink); page-break-after:always; border-bottom:2px solid #dde4ee; }
+  .slide.dark { background:var(--ink); color:#eef3fa; }
+  h1 { font-size:3.2em; line-height:1.25; margin-bottom:.4em; }
+  h2 { font-size:2.2em; color:var(--accent); margin-bottom:.6em; }
+  .dark h2 { color:#7fb0ff; }
+  h3 { font-size:1.35em; margin:.8em 0 .3em; }
+  p, li { font-size:1.25em; line-height:1.7; color:inherit; }
+  ul { margin-left:1.2em; }
+  li { margin:.35em 0; }
+  .sub { color:var(--sub); font-size:1.15em; }
+  .dark .sub { color:#9db4d0; }
+  .tag { display:inline-block; background:var(--accent); color:#fff; padding:.15em .7em; border-radius:1em; font-size:.9em; margin-right:.5em; }
+  .loopbox { border:3px solid var(--accent); border-radius:14px; padding:1.2em 1.6em; margin-top:1em; background:#fff; }
+  .graph { display:flex; gap:1em; flex-wrap:wrap; margin-top:1em; }
+  .node { background:#fff; border:2px solid #c8d4e6; border-radius:10px; padding:.8em 1.1em; flex:1 1 220px; }
+  .dark .node, .dark .loopbox { background:#243248; border-color:#3d5473; }
+  .footer { position:absolute; bottom:2.5vh; left:9vw; font-size:.85em; color:var(--sub); }
+  .en { font-family:"Times New Roman",serif; }
+</style>
+</head>
+<body>
+
+<section class="slide dark">
+  <h1>從 LLM Wiki 到 AI Agent</h1>
+  <h2 class="en" style="color:#7fb0ff">Five Papers, One Loop, One Graph</h2>
+  <p class="sub en">ReAct · Reflexion · Toolformer · Generative Agents · CRAG</p>
+  <p class="sub" style="margin-top:2em">生成式AI 第十週教學簡報｜知識庫：LLM Wiki（Colab ingest ＋ NotebookLM）</p>
+</section>
+
+<section class="slide">
+  <h2>為什麼要講 Agent Loop？</h2>
+  <ul>
+    <li>單純的 LLM：一次輸入 → 一次輸出（<b>one-shot</b>），錯了不會自己修。</li>
+    <li>AI Agent：把輸出回饋回輸入，形成 <b>感知 → 思考 → 行動 → 觀察</b> 的迴圈。</li>
+    <li>本週主軸：<b>Loop（迴圈）</b>讓 agent 自我修正；<b>Graph（圖）</b>把多個節點接成流程。</li>
+  </ul>
+  <div class="loopbox">
+    <p class="en"><b>Plan → Act → Observe → Reflect → (repeat)</b></p>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>知識庫怎麼來：LLM Wiki 流程</h2>
+  <ul>
+    <li><b>步驟一（Colab）</b>：抓取 5 篇 arXiv 論文標題與摘要 → 寫成 <span class="en">wiki/*.md</span> 知識庫。</li>
+    <li><b>步驟二（NotebookLM）</b>：上傳 5 來源 → 產生帶引用的學習指南（Study Guide）。</li>
+    <li><b>步驟三（討論後生成）</b>：先與筆記本討論「每篇在 Loop 中的角色」，結論才寫進本簡報。</li>
+  </ul>
+  <p class="sub" style="margin-top:1em">執行紀錄：Colab 全數執行 → <span class="en">PASS：5/5 篇 Wiki 完整</span>（截圖留存）。</p>
+</section>
+
+<section class="slide">
+  <h2><span class="tag">Loop·Act</span>ReAct（2210.03629）</h2>
+  <p class="en sub">Synergizing Reasoning and Acting in Language Models</p>
+  <ul>
+    <li>把「思考（Reason）」與「行動（Act）」交錯成迴圈：Thought → Action → Observation。</li>
+    <li>行動讓模型查外部世界，思考讓行動有方向。</li>
+  </ul>
+  <h3>Wiki 結論（Loop 角色）</h3>
+  <p>Agent Loop 的<b>骨架</b>：沒有 ReAct，就沒有 Act/Observe 兩步。</p>
+</section>
+
+<section class="slide">
+  <h2><span class="tag">Loop·Reflect</span>Reflexion（2303.11366）</h2>
+  <p class="en sub">Language Agents with Verbal Reinforcement Learning</p>
+  <ul>
+    <li>失敗後用<b>語言自我回饋</b>寫進記憶，下次嘗試前先讀。</li>
+    <li>不動模型權重，靠「口頭 reinforcements」進步。</li>
+  </ul>
+  <h3>Wiki 結論（Loop 角色）</h3>
+  <p>Loop 裡的<b>修正器</b>：讓第二次比第一次好。</p>
+</section>
+
+<section class="slide">
+  <h2><span class="tag">Loop·Tools</span>Toolformer（2302.04761）</h2>
+  <p class="en sub">Language Models Can Teach Themselves to Use Tools</p>
+  <ul>
+    <li>模型自己學會在何時插入哪個 API 呼叫（calculator、search、translate…）。</li>
+    <li>用少樣本自我監督挑選「呼叫後_loss 變小」的工具调用點。</li>
+  </ul>
+  <h3>Wiki 結論（Loop 角色）</h3>
+  <p>給 Act 一步<b>手腳</b>：把行動從純文字擴展到工具。</p>
+</section>
+
+<section class="slide">
+  <h2><span class="tag">Loop·Memory</span>Generative Agents（2304.03442）</h2>
+  <p class="en sub">Interactive Simulacra of Human Behavior</p>
+  <ul>
+    <li>記憶流（memory stream）＋ 週期性<b>反思</b>（reflection）＋ 計畫（planning）。</li>
+    <li>25 個 agent 的小鎮示範：長期記憶讓行為一致可信。</li>
+  </ul>
+  <h3>Wiki 結論（Loop 角色）</h3>
+  <p>Loop 的<b>燃料庫</b>：觀察進記憶，記憶餵反思與計畫。</p>
+</section>
+
+<section class="slide">
+  <h2><span class="tag">Graph·Check</span>CRAG（2401.15884）</h2>
+  <p class="en sub">Corrective Retrieval Augmented Generation</p>
+  <ul>
+    <li>在 RAG 前加<b>檢索評量器</b>（retrieval evaluator）：正確 / 含糊 / 錯誤三岔。</li>
+    <li>錯誤 → 丟棄改走網頁搜尋；含糊 → 分解精煉。</li>
+  </ul>
+  <h3>Wiki 結論（Graph 角色）</h3>
+  <p>Graph 裡的<b>路由節點</b>：依品質分岔，示範 graph 為何比單線 loop 穩。</p>
+</section>
+
+<section class="slide dark">
+  <h2>總結：一篇 Loop，一張 Graph</h2>
+  <div class="graph">
+    <div class="node"><b>ReAct</b><br>骨架：Act/Observe</div>
+    <div class="node"><b>Reflexion</b><br>修正：自我回饋</div>
+    <div class="node"><b>Toolformer</b><br>工具：行動手腳</div>
+    <div class="node"><b>Gen. Agents</b><br>記憶：反思燃料</div>
+    <div class="node"><b>CRAG</b><br>路由：品質分岔</div>
+  </div>
+  <ul style="margin-top:1.4em">
+    <li>Loop = 時間維度：同一 agent 越做越好。</li>
+    <li>Graph = 空間維度：多節點各司其職、可除錯。</li>
+  </ul>
+  <p class="sub" style="margin-top:1.5em">附錄：Colab notebook、LLM Wiki（GitHub）、NotebookLM 分享連結見作業頁。</p>
+</section>
+
+</body>
+</html>
